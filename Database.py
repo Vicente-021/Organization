@@ -30,12 +30,3 @@ cursor.execute("""
 
 conn.commit()
 
-def mostrar_contenedores():
-    conn = sqlite3.connect("organize.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM cajas")
-    for row in cursor.fetchall():
-        print(f"id: {row[0]}, nombre: {row[1]}")
-    conn.close()
-
-mostrar_contenedores()
