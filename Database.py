@@ -1,0 +1,41 @@
+import sqlite3
+
+conn = sqlite3.connect("organize.db")
+cursor = conn.cursor()
+
+cursor.execute("""
+    create table if not exists ubicaciones (
+    id integer primary key autoincrement,
+    nombre text not null
+    );
+    """)
+
+cursor.execute("""
+    create table if not exists cajas (
+    id integer primary key autoincrement,
+    nombre text not null,
+    ubicacion_id bigint references ubicaciones (id),
+    id_caja_padre integer references cajas(id)
+    );
+    """)
+
+cursor.execute("""
+    create table if not exists items (
+    id integer primary key autoincrement,
+    nombre text not null,
+    descripcion text,
+    caja_id bigint references cajas (id)
+    );
+    """)
+
+conn.commit()
+
+def mostrar_contenedores():
+    conn = sqlite3.connect("organize.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM cajas")
+    for row in cursor.fetchall():
+        print(f"id: {row[0]}, nombre: {row[1]}")
+    conn.close()
+
+mostrar_contenedores()
