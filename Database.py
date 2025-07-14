@@ -6,7 +6,7 @@ cursor = conn.cursor()
 cursor.execute("""
     create table if not exists ubicaciones (
     id integer primary key autoincrement,
-    nombre text not null
+    nombre text not null unique
     );
     """)
 
@@ -27,6 +27,7 @@ cursor.execute("""
     caja_id bigint references cajas (id)
     );
     """)
+
 
 conn.commit()
 
