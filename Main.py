@@ -17,7 +17,17 @@ def eliminar_ubicacion():
     nombre = entry_nombre_ubi_del.get()
     conn = sqlite3.connect("organize.db")
     cursor = conn.cursor()
+
+    cursor.execute("SELECT nombre FROM ubicaciones WHERE nombre = (?)", (nombre,))
+    if not cursor.fetchone():
+        print(f"Error: No existe una ubicacion con Nombre: {nombre}")
+        return False
+
     cursor.execute("Delete from ubicaciones Where nombre = (?)", (nombre,))
+
+    conn.commit()
+    print(f"Caja con ID {nombre} eliminada correctamente")
+
     conn.commit()
     conn.close()
     print("ubicacion eliminada")
