@@ -1,4 +1,3 @@
-import __main__
 import sqlite3
 
 
@@ -53,4 +52,3 @@ def aliminar_caja(nombre_elim):
     conn.commit()
     conn.close()
     print("Caja eliminada")
-    
