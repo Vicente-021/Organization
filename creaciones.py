@@ -40,7 +40,7 @@ def agregar_caja(nombre):
     print(f"contenedor {nombre} agregado.")
 
 
-def aliminar_caja(nombre_elim):
+def eliminar_caja(nombre_elim):
     conn = sqlite3.connect("organize.db")
     cursor = conn.cursor()
 
