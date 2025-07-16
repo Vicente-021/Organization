@@ -23,6 +23,19 @@ def mostrar_cajas():
         print(f"id:{row[0]}, nombre: {row[1]}")
 
 
+def act_ubicaciones():
+    conn = sqlite3.connect("organize.db")
+    cursor = conn.cursor()
+    opciones = [fila[0] for fila in cursor.execute("SELECT nombre FROM ubicaciones").fetchall()]
+    conn.close()
+    return opciones
+
+
+def func_boton_ubi(opciones):
+    creaciones.agregar_ubicaciones(entry_nombre_ubi.get())
+    act_ubicaciones()
+
+
 root = Tk()
 root.title("Organizador")
 root.geometry("500x200")
@@ -32,30 +45,30 @@ Label(root, text="Nombre Ubicación: ").grid(column=0, row=0, padx=10)
 entry_nombre_ubi = Entry(root)
 entry_nombre_ubi.grid(column=0, row=1, padx=10)
 
-Label(root, text="Quitar ubicacion").grid(column=0, row=2, padx=10)
-entry_nombre_ubi_del = Entry(root)
-entry_nombre_ubi_del.grid(column=0, row=3, padx=10)
-
 # Botones para la creación, eliminación y visualización de las ubicaciones
 Button(root,
        text="Agregar ubicacion",
-       command=lambda: creaciones.agregar_ubicaciones(entry_nombre_ubi.get())).grid(column=0, row=4, padx=10)
+       command=lambda: func_boton_ubi(act_ubicaciones())).grid(column=0, row=4, padx=10)
 Button(root,
        text="Eliminar ubicación",
-       command=lambda: creaciones.eliminar_ubicacion(entry_nombre_ubi_del.get())).grid(column=0, row=5, padx=10)
+       command=lambda: creaciones.eliminar_ubicacion(entry_nombre_ubi.get())).grid(column=0, row=5, padx=10)
 
 Button(root,
        text="Ver ubiaciones",
        command=mostrar_ubicaciones).grid(column=0, row=6, padx=10)
 
+
+# Visualizacion de las ubicaciones
+ubicacion_seleccionada = StringVar()
+ubicacion_seleccionada.set("Seleccionar ubicación")
+
+menu_opciones_ubi = OptionMenu(root, ubicacion_seleccionada, "-", *act_ubicaciones())
+menu_opciones_ubi.grid(column=0, row=7, padx=10, pady=5)
+
 # Labels y entradas para ingresar nombres de cajas, eliminación y creación
 Label(root, text="Nombre Caja: ").grid(column=1, row=0, padx=10)
 entry_nombre_caja = Entry(root)
 entry_nombre_caja.grid(column=1, row=1, padx=10)
-
-Label(root, text="Quitar caja: ").grid(column=1, row=2, padx=10)
-entry_nombre_caja_elim = Entry(root)
-entry_nombre_caja_elim.grid(column=1, row=3, padx=10)
 
 # Botones para la creación, eliminación y visualización de las cajas
 Button(root,
@@ -63,9 +76,10 @@ Button(root,
        command=lambda: creaciones.agregar_caja(entry_nombre_caja.get())).grid(column=1, row=4, padx=10)
 Button(root,
        text="Quitar caja",
-       command=lambda: creaciones.eliminar_caja(entry_nombre_caja_elim.get())).grid(column=1, row=5, padx=10)
+       command=lambda: creaciones.eliminar_caja(entry_nombre_caja.get())).grid(column=1, row=5, padx=10)
 Button(root,
        text="Ver cajas",
        command=mostrar_cajas).grid(column=1, row=6, padx=10)
+
 
 root.mainloop()

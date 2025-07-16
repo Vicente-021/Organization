@@ -14,7 +14,7 @@ cursor.execute("""
     create table if not exists cajas (
     id integer primary key autoincrement,
     nombre text not null,
-    ubicacion_nombre text references ubicaciones (nombre),
+    ubicacion_nombre text references ubicaciones (nombre) not null,
     id_caja_padre integer references cajas(id)
     );
     """)
