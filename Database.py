@@ -24,7 +24,7 @@ cursor.execute("""
     id integer primary key autoincrement,
     nombre text not null,
     descripcion text,
-    caja_id bigint references cajas (id)
+    caja_nombre text references cajas (nombre) not null
     );
     """)
 
