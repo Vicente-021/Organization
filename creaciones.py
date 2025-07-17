@@ -1,7 +1,25 @@
 import sqlite3
 
 
-def agregar_ubicaciones(nombre):
+def act_ubicaciones(menu_opciones_ubi, ubicacion_seleccionada):
+    menu_opciones_ubi['menu'].delete(0, 'end')
+
+    conn = sqlite3.connect("organize.db")
+    cursor = conn.cursor()
+    nuevas_opciones = [fila[0] for fila in cursor.execute("SELECT nombre FROM ubicaciones").fetchall()]
+    conn.close()
+
+    for opcion in nuevas_opciones:
+        menu_opciones_ubi['menu'].add_command(label=opcion,
+                                              command=lambda valor=opcion: ubicacion_seleccionada.set(valor))
+
+    if nuevas_opciones:
+        ubicacion_seleccionada.set(nuevas_opciones[0])
+    else:
+        ubicacion_seleccionada.set("Sin ubicaciones")
+
+
+def agregar_ubicaciones(nombre, menu_opciones_ubi, ubicacion_seleccionada):
     conn = sqlite3.connect("organize.db")
     cursor = conn.cursor()
 
@@ -9,9 +27,10 @@ def agregar_ubicaciones(nombre):
     conn.commit()
     conn.close()
     print(f"contenedor {nombre} agregado.")
+    act_ubicaciones(menu_opciones_ubi, ubicacion_seleccionada)
 
 
-def eliminar_ubicacion(nombre_elim):
+def eliminar_ubicacion(nombre_elim,menu_opciones_ubi, ubicacion_seleccionada):
     conn = sqlite3.connect("organize.db")
     cursor = conn.cursor()
 
@@ -28,13 +47,14 @@ def eliminar_ubicacion(nombre_elim):
     conn.commit()
     conn.close()
     print("ubicacion eliminada")
+    act_ubicaciones(menu_opciones_ubi, ubicacion_seleccionada)
 
 
-def agregar_caja(nombre):
+def agregar_caja(nombre, ubicacion):
     conn = sqlite3.connect("organize.db")
     cursor = conn.cursor()
 
-    cursor.execute("Insert into cajas (nombre) values (?)", (nombre, ))
+    cursor.execute("Insert into cajas (nombre, ubicacion_nombre) values (?, ?)", (nombre, ubicacion))
     conn.commit()
     conn.close()
     print(f"contenedor {nombre} agregado.")
