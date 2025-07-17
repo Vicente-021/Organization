@@ -19,24 +19,6 @@ def act_ubicaciones(menu_opciones_ubi, ubicacion_seleccionada):
         ubicacion_seleccionada.set("Sin ubicaciones")
 
 
-def act_cajas(menu_opciones_cajas, caja_seleccionada):
-    menu_opciones_cajas['menu'].delete(0, 'end')
-
-    conn = sqlite3.connect("organize.db")
-    cursor = conn.cursor()
-    nuevas_cajas = [fila[0] for fila in cursor. execute("Select nombre from cajas").fetchall()]
-    conn.close()
-
-    for caja in nuevas_cajas:
-        menu_opciones_cajas['menu'].add_command(label=caja,
-                                                command=lambda valor=caja: caja_seleccionada.set(valor))
-
-    if nuevas_cajas:
-        caja_seleccionada.set(nuevas_cajas[0])
-    else:
-        caja_seleccionada.set("Sin cajas")
-
-
 def agregar_ubicaciones(nombre, menu_opciones_ubi, ubicacion_seleccionada):
     conn = sqlite3.connect("organize.db")
     cursor = conn.cursor()
@@ -63,6 +45,24 @@ def eliminar_ubicacion(nombre_elim, menu_opciones_ubi, ubicacion_seleccionada):
     conn.close()
     print("ubicacion eliminada")
     act_ubicaciones(menu_opciones_ubi, ubicacion_seleccionada)
+
+
+def act_cajas(menu_opciones_cajas, caja_seleccionada):
+    menu_opciones_cajas['menu'].delete(0, 'end')
+
+    conn = sqlite3.connect("organize.db")
+    cursor = conn.cursor()
+    nuevas_cajas = [fila[0] for fila in cursor. execute("Select nombre from cajas").fetchall()]
+    conn.close()
+
+    for caja in nuevas_cajas:
+        menu_opciones_cajas['menu'].add_command(label=caja,
+                                                command=lambda valor=caja: caja_seleccionada.set(valor))
+
+    if nuevas_cajas:
+        caja_seleccionada.set(nuevas_cajas[0])
+    else:
+        caja_seleccionada.set("Sin cajas")
 
 
 def agregar_caja(nombre, ubicacion, menu_opciones_cajas, caja_seleccionada):
@@ -102,4 +102,5 @@ def agregar_item(nombre, caja):
     conn.commit()
     conn.close()
     print(f"item {nombre} agregado.")
+
 

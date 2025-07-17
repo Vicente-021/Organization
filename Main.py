@@ -98,6 +98,9 @@ entry_nombre_item = Entry(root)
 entry_nombre_item.grid(column=columna_items, row=1, padx=10)
 
 # Botones para la creación, eliminación y visualización de los items
-
+Button(root,
+       text="Agregar item",
+       command=lambda: creaciones.agregar_item(entry_nombre_item.get(),
+                                               caja_seleccionada.get())).grid(column=columna_items, row=4, padx=10)
 
 root.mainloop()
